@@ -2,11 +2,47 @@
     <lightning-layout>
         <lightning-layout-item size='11'>
             <lightning-vertical-navigation>
-                
+                <lightning-vertical-navigation-item label='Phones' name='Phone'>
+                    <template for:each={orders} for:item='order'>
+                        <div key={order.Id}>{phoneItem}={order}</div>
+                        <template if:true={isPhone}>
+                            <lightning-accordion-section key={order.Id} label={order.Name}>
+                                <ul>
+                                    <li>{order.Description}</li>
+                                    <li>Quantity: {order.Quantity}</li>
+                                    <li>Unit Price: {order.UnitPrice}</li>
+                                    <li>Total Price: {order.TotalPrice}</li>
+                                </ul>
+                                <lightning-button label='Remove'></lightning-button>
+                                <lightning-button label='Add'></lightning-button>
+                                <lightning-button label='Delete'></lightning-button>
+                            </lightning-accordion-section>
+                        </template>
+                    </template>
+                </lightning-vertical-navigation-item>
+                <lightning-vertical-navigation-item label='Laptops' name='Laptop'>
+                    <template for:each={orders} for:item='order'>
+                        <div key={order.Id}>{laptopItem}={order}</div>
+                        <template if:true={isLaptop}>
+                            <lightning-accordion-section key={order.Id} label={order.Name}>
+                                <ul>
+                                    <li>{order.Description}</li>
+                                    <li>Quantity: {order.Quantity}</li>
+                                    <li>Unit Price: {order.UnitPrice}</li>
+                                    <li>Total Price: {order.TotalPrice}</li>
+                                </ul>
+                                <lightning-button label='Remove'></lightning-button>
+                                <lightning-button label='Add'></lightning-button>
+                                <lightning-button label='Delete'></lightning-button>
+                            </lightning-accordion-section>
+                        </template>
+                    </template>
+                </lightning-vertical-navigation-item>
             </lightning-vertical-navigation>
         </lightning-layout-item>
         <lightning-layout-item size='1'>
             <lightning-button label='Home' onclick={handleHomeButton}></lightning-button>
         </lightning-layout-item>
     </lightning-layout>
+    <lightning-button label='Buy' onclick={handleBuyButton}></lightning-button>
 </template>

@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import checkBucketAvailability from '@salesforce/apex/BucketController.checkBucketAvailability';
-import { createRecord, generateRecordInputForCreate } from 'lightning/uiRecordApi';
+import { createRecord } from 'lightning/uiRecordApi';
 import Id from '@salesforce/user/Id';
 import BUCKET_OBJECT from '@salesforce/schema/Bucket__c';
 import USER_FIELD from '@salesforce/schema/Bucket__c.User__c';

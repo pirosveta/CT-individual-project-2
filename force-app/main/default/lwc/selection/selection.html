@@ -1,0 +1,10 @@
+<template>
+    <lightning-layout>
+        <p>{selectedCategoryPlural}</p>
+        <lightning-accordion allow-multiple-sections-open>
+            <template for:each={merchandises} for:item="merchandise">
+                <c-store-line-item key={merchandise.Id} merchandise={merchandise}></c-store-line-item>
+            </template>
+        </lightning-accordion>
+    </lightning-layout>
+</template>

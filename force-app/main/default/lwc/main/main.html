@@ -1,0 +1,8 @@
+<template>
+    <template if:true={isHomePage}>
+        <c-home onbucket={handleChangePage}></c-home>
+    </template>
+    <template if:false={isHomePage}>
+        <c-bucket onhome={handleChangePage}></c-bucket>
+    </template>
+</template>

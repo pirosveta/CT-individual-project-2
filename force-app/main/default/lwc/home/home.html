@@ -1,0 +1,13 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item size='3'>
+            <c-category onchange={handleChangeCategory}></c-category>
+        </lightning-layout-item>
+        <lightning-layout-item size='8'>
+            <c-selection selected-category={categoryName} selected-category-plural={categoryPluralName}></c-selection>
+        </lightning-layout-item>
+        <lightning-layout-item size='1'>
+            <lightning-button label='Bucket' onclick={handleBucketButton}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

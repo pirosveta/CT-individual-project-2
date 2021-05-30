@@ -1,0 +1,10 @@
+<template>
+        <lightning-accordion-section label={merchandise.Name}>
+            <ul>
+                <li>{merchandise.Description__c}</li>
+                <li>Left: {merchandise.AvailableQuantity__c}</li>
+            </ul>
+            <lightning-input type='number' value='1' name='inputQuantity' onchange={handleQuantityInput}></lightning-input>
+            <lightning-button label='Add to bucket' onclick={handleAddButton}></lightning-button>
+        </lightning-accordion-section>
+</template>

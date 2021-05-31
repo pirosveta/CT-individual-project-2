@@ -9,14 +9,14 @@ import UNIT_PRICE_FIELD from '@salesforce/schema/Invoice_Line_Item__c.Unit_Price
 import INVOICE_FIELD from '@salesforce/schema/Invoice_Line_Item__c.Invoice__c';
 import MERCHANDISE_FIELD from '@salesforce/schema/Invoice_Line_Item__c.Merchandise__c'; 
 import Id from '@salesforce/user/Id';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class Bucket extends LightningElement {
     userId = Id;
-    orders = [];
-    phoneItem;
-    isPhone=false;
-    laptopItem;
-    isLaptop=false;
+    orders;
+    currentCategory = 'Select Category';
+    statusCode = 'Open';
+    invoiceId;
 
     @wire(getOrderList, {userId: '$userId'})
     wiredOrders({data}) {
@@ -25,41 +25,40 @@ export default class Bucket extends LightningElement {
         };
     };
 
+    handleChangeCategory(event) {
+        this.currentCategory = event.detail;
+    }
+
     handleHomeButton(event) {
         this.dispatchEvent(new CustomEvent('home'));
     }
 
-    set phoneItem(value) {
-        if (value.Category__c === 'Phone') {
-            this.isPhone = true;
-        } 
-        else {
-            this.isPhone = false;
-        }
-    }
-
     handleBuyButton(event) {
         const fields = {};
-        fields[STATUS_FIELD.fieldApiName] = 'Open';
+        fields[STATUS_FIELD.fieldApiName] = this.statusCode;
         const recordInput = { apiName: INVOICE_OBJECT.objectApiName, fields };
-        createRecord(recordInput);
+        createRecord(recordInput)
+            .then(record => {
+                this.invoiceId = record.Id;
+            });
 
         for (const item in this.orders) {
-            fields = {};
-            fields[QUANTITY_FIELD.fieldApiName] = this.bucketId;
-            fields[UNIT_PRICE_FIELD.fieldApiName] = this.merchandise.Id;
-            fields[UNIT_PRICE_FIELD.fieldApiName] = this.merchandise.Price;
-            const recordInput = { apiName: INVOICE_ITEM_OBJECT.objectApiName, fields };
-            createRecord(recordInput);
-        }
-    }
-
-    set laptopItem(value) {
-        if (value.Category__c === 'Laptop') {
-            this.isLaptop = true;
-        }
-        else {
-            this.isLaptop = false;
+            const itemFields = {};
+            itemFields[QUANTITY_FIELD.fieldApiName] = this.bucketId;
+            itemFields[UNIT_PRICE_FIELD.fieldApiName] = item.Price;
+            itemFields[MERCHANDISE_FIELD.fieldApiName] = item.merchId;
+            itemFields[INVOICE_FIELD.fieldApiName] = this.invoiceId;
+            const itemInput = { apiName: INVOICE_ITEM_OBJECT.objectApiName, itemFields };
+            createRecord(itemInput)
+                .then(() => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success',
+                            message: 'Item deleted successfully',
+                            variant: 'success'
+                        })
+                    );
+                });
         }
     }
 }

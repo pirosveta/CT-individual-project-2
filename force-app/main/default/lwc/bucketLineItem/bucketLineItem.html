@@ -1,3 +1,15 @@
 <template>
-    
+    <template if:true={desiredCategory}>
+        <lightning-accordion-section label={order.Name}>
+            <ul>
+                <li>Description: {order.Description}</li>
+                <li>Quantity: {updateQuantity}</li>
+                <li>Unit Price: {order.UnitPrice}</li>
+                <li>Total Price: {order.TotalPrice}</li>
+            </ul>
+            <lightning-button icon-name='utility:dash' onclick={handleSubButton}></lightning-button>
+            <lightning-button icon-name='utility:add' onclick={handleAddButton}></lightning-button>
+            <lightning-button label='Delete' onclick={handleDeleteButton}></lightning-button>
+        </lightning-accordion-section>
+    </template>
 </template>

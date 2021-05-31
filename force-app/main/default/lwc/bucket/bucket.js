@@ -16,7 +16,6 @@ export default class Bucket extends LightningElement {
     orders;
     currentCategory = 'Select Category';
     statusCode = 'Open';
-    invoiceId;
 
     @wire(getOrderList, {userId: '$userId'})
     wiredOrders({data}) {
@@ -39,26 +38,27 @@ export default class Bucket extends LightningElement {
         const recordInput = { apiName: INVOICE_OBJECT.objectApiName, fields };
         createRecord(recordInput)
             .then(record => {
-                this.invoiceId = record.Id;
-            });
-
-        for (const item in this.orders) {
-            const itemFields = {};
-            itemFields[QUANTITY_FIELD.fieldApiName] = this.bucketId;
-            itemFields[UNIT_PRICE_FIELD.fieldApiName] = item.Price;
-            itemFields[MERCHANDISE_FIELD.fieldApiName] = item.merchId;
-            itemFields[INVOICE_FIELD.fieldApiName] = this.invoiceId;
-            const itemInput = { apiName: INVOICE_ITEM_OBJECT.objectApiName, itemFields };
-            createRecord(itemInput)
-                .then(() => {
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Success',
-                            message: 'Item deleted successfully',
-                            variant: 'success'
-                        })
-                    );
+                const invoiceId = record.id;
+                this.orders.forEach(function(item) {
+                    const itemFields = {};
+                    itemFields[QUANTITY_FIELD.fieldApiName] = item.Quantity;
+                    itemFields[UNIT_PRICE_FIELD.fieldApiName] = item.UnitPrice;
+                    itemFields[MERCHANDISE_FIELD.fieldApiName] = item.merchId;
+                    itemFields[INVOICE_FIELD.fieldApiName] = invoiceId;
+                    console.log(itemFields);
+                    const itemInput = { apiName: INVOICE_ITEM_OBJECT.objectApiName, itemFields };
+                    console.log(itemInput);
+                    createRecord(itemInput)
+                        .then(() => {
+                            this.dispatchEvent(
+                                new ShowToastEvent({
+                                    title: 'Success',
+                                    message: 'Item deleted successfully',
+                                    variant: 'success'
+                                })
+                            );
+                        });
                 });
-        }
+            });
     }
 }

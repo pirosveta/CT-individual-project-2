@@ -23,12 +23,13 @@ public with sharing class BucketController {
             for (Bucket_Line_Item__c i : items) {
                 merchId.add(i.Merchandise__c);
             }
-            List<Merchandise__c> merchs = [SELECT Id, Name, Description__c, Category__c FROM Merchandise__c
+            List<Merchandise__c> merchs = [SELECT Id, Name, AvailableQuantity__c, Description__c, Category__c FROM Merchandise__c
                                            WHERE Id IN :merchId];
             for (Bucket_Line_Item__c i : items) {
                 for (Merchandise__c m : merchs) {
                     if (i.Merchandise__c == m.Id) {
-                        orders.add(new BucketItem(m.Id, i.Id, m.Name, m.Description__c, m.Category__c, i.Quantity__c, i.Unit_Price__c, i.Total_Price__c));
+                        orders.add(new BucketItem(m.Id, i.Id, m.Name, m.Description__c, m.Category__c, i.Quantity__c, 
+                                                  m.AvailableQuantity__c, i.Unit_Price__c, i.Total_Price__c));
                     }
                 }
             }

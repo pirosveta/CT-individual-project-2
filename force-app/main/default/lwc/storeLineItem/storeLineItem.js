@@ -21,7 +21,19 @@ export default class StoreLineItem extends LightningElement {
     };
 
     handleQuantityInput(event) {
-        this.quantity = event.detail.value;
+        const newQuantity = event.detail.value;
+        if (newQuantity > this.merchandise.AvailableQuantity__c) {
+            event.detail.value = 1;
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: "Error input quantity",
+                    message: 'The available quantity is less than the selected',
+                    variant: "error"
+                })
+            );
+        } else {
+            this.quantity = newQuantity;
+        }
     }
 
     handleAddButton(event) {
